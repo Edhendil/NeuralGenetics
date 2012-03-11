@@ -15,6 +15,7 @@ import org.apache.commons.math.random.RandomDataImpl;
 import pl.krug.game.NeuralPlayer;
 import pl.krug.genetic.GeneticEvaluator;
 import pl.krug.genetic.GeneticSelector;
+import pl.krug.genetic.selector.util.impl.GeneticSelectorBestOfTwo;
 
 /**
  * Many games played by randomly chosen players to see which one is the best
@@ -37,7 +38,7 @@ import pl.krug.genetic.GeneticSelector;
  * @author edhendil
  *
  */
-public class IterativeTronGame implements GeneticSelector<NeuralPlayer> {
+public class IterativeTronGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluator<NeuralPlayer> {
 
     private Map<NeuralPlayer, Integer> _gamesWon = new HashMap<NeuralPlayer, Integer>();
     private List<NeuralPlayer> _players = new ArrayList<NeuralPlayer>();
@@ -97,7 +98,8 @@ public class IterativeTronGame implements GeneticSelector<NeuralPlayer> {
     }
 
     public List<List<NeuralPlayer>> selectParents() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        GeneticSelectorBestOfTwo<NeuralPlayer> select = new GeneticSelectorBestOfTwo<NeuralPlayer>(this);
+        return select.selectParents(_players);
     }
 
     /**
@@ -130,6 +132,7 @@ public class IterativeTronGame implements GeneticSelector<NeuralPlayer> {
         }
     }
 
+    @Override
     public double evaluate(NeuralPlayer individual) {
         double result = _gamesWon.get(individual);
         System.out.println(result);
