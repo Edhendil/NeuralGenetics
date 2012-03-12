@@ -1,9 +1,5 @@
 package pl.krug.neural.network.neuron;
 
-import java.util.ArrayList;
-import java.util.List;
-import pl.krug.neural.network.NeuralOutputEvent;
-import pl.krug.neural.network.NeuralOutputListener;
 import pl.krug.neural.network.signal.NeuralSignal;
 import pl.krug.neural.network.signal.SignalListener;
 import pl.krug.neural.network.signal.SignalType;
@@ -15,16 +11,6 @@ import pl.krug.neural.network.signal.SignalType;
  */
 public class Effector extends NormalNeuron {
 
-	List<NeuralOutputListener> _outputListeners = new ArrayList<NeuralOutputListener>();
-
-	public void addNeuralOutputListener(NeuralOutputListener listener) {
-		_outputListeners.add(listener);
-	}
-
-	public void removeNeuralOutputListener(NeuralOutputListener listener) {
-		_outputListeners.remove(listener);
-	}
-
 	@Override
 	public void produceSignals() {
 		if (getCurrentEnergy() > 0) {
@@ -34,10 +20,6 @@ public class Effector extends NormalNeuron {
 			for (SignalListener listener : _signalListeners) {
 				listener.signalReceived(new NeuralSignal(SignalType.ENERGY,
 						signalStrenght));
-			}
-			// part responsible for firing any output events
-			for (NeuralOutputListener listen : _outputListeners) {
-				listen.outputReceived(new NeuralOutputEvent(getCurrentEnergy()));
 			}
 			setCurrentEnergy(0);
 		}

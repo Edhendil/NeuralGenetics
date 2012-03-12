@@ -40,10 +40,12 @@ public abstract class BaseNeuron implements Neuron {
 		return _currentEnergy;
 	}
 
+    @Override
 	public void addSignalListener(SignalListener listener) {
 		_signalListeners.add(listener);
 	}
 
+    @Override
 	public void removeSignalListener(SignalListener listener) {
 		_signalListeners.remove(listener);
 	}
