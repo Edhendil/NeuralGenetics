@@ -9,5 +9,6 @@
   <modules>
     <module>Genetic</module>
     <module>Neural</module>
+    <module>Game</module>
   </modules>
 </project>
