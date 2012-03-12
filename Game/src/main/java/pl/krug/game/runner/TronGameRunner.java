@@ -2,7 +2,6 @@ package pl.krug.game.runner;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import pl.krug.game.NeuralPlayer;
 import pl.krug.game.tron.TronGame;
 import pl.krug.neural.dao.NetworkModelDAO;

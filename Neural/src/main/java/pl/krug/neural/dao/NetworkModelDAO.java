@@ -1,11 +1,9 @@
 package pl.krug.neural.dao;
 
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-
 import pl.krug.neural.network.model.NetworkModel;
 import pl.krug.neural.network.model.NeuralLinkModel;
 import pl.krug.neural.network.model.NeuronModel;

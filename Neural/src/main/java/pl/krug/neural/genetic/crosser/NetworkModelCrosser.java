@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
-
 import pl.krug.genetic.GeneticCrosser;
 import pl.krug.neural.genetic.mutator.NetworkModelMutator;
 import pl.krug.neural.network.model.NetworkModel;

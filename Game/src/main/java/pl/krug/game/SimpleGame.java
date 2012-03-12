@@ -1,19 +1,9 @@
 package pl.krug.game;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import pl.krug.game.world.GameWorld;
 import pl.krug.genetic.GeneticEvaluator;
 import pl.krug.genetic.GeneticSelector;
 import pl.krug.genetic.selector.util.impl.GeneticSelectorBestOfTwo;

@@ -3,7 +3,6 @@ package pl.krug.game.world;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
 import pl.krug.game.NeuralPlayer;
 
 /**

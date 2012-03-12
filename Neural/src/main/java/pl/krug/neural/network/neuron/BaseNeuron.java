@@ -1,19 +1,9 @@
 package pl.krug.neural.network.neuron;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import pl.krug.neural.network.signal.NeuralSignal;
 import pl.krug.neural.network.signal.SignalListener;
 import pl.krug.neural.network.signal.SignalType;

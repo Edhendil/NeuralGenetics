@@ -2,7 +2,6 @@ package pl.krug.game;
 
 import pl.krug.neural.network.NeuralNetwork;
 import pl.krug.neural.network.model.NetworkModel;
-import pl.krug.neural.network.neuron.Neuron;
 
 /**
  * Game/world counterpart of neural network

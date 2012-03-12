@@ -1,8 +1,6 @@
 package pl.krug.game.tron;
 
 import java.awt.Point;
-import java.util.Arrays;
-
 import pl.krug.game.NeuralPlayer;
 
 /**

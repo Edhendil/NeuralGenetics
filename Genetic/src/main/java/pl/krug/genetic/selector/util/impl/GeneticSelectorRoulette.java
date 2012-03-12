@@ -1,7 +1,6 @@
 package pl.krug.genetic.selector.util.impl;
 
 import java.util.List;
-import pl.krug.genetic.GeneticSelector;
 
 /**
  * Follows the logic of roulette strategy for choosing parents from population

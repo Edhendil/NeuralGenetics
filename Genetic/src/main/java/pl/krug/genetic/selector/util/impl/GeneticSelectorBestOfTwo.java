@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import pl.krug.genetic.GeneticEvaluator;
-import pl.krug.genetic.GeneticSelector;
 
 /**
  * These selectors will be probably used in many cases but they do not implement anything.

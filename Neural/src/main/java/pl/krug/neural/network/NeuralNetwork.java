@@ -1,18 +1,8 @@
 package pl.krug.neural.network;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 import pl.krug.neural.network.neuron.NeuralLink;
 import pl.krug.neural.network.neuron.Neuron;
-import pl.krug.neural.network.signal.SignalListener;
-import pl.krug.neural.network.signal.SignalProducer;
 
 /**
  * To be used in neural engine

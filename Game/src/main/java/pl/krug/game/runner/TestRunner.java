@@ -1,14 +1,7 @@
 package pl.krug.game.runner;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import pl.krug.neural.genetic.crosser.NetworkModelCrosser;
 import pl.krug.neural.dao.NetworkModelDAO;
-import pl.krug.neural.network.NeuralNetwork;
-import pl.krug.neural.network.NeuralNetworkFactory;
 import pl.krug.neural.network.model.NetworkModel;
-import pl.krug.neural.network.model.NetworkModelFactory;
 import pl.krug.neural.network.model.NeuronModel;
 
 public class TestRunner {

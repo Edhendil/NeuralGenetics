@@ -1,28 +1,17 @@
 package pl.krug.game.runner;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
 import pl.krug.game.NeuralPlayer;
 import pl.krug.game.SimpleGame;
-import pl.krug.game.world.SimpleWorld;
-import pl.krug.genetic.GeneticEngine;
 import pl.krug.game.genetic.crosser.NeuralPlayerCrosser;
+import pl.krug.genetic.GeneticEngine;
 import pl.krug.genetic.impl.GeneticEngineStandard;
-import pl.krug.genetic.selector.util.impl.GeneticSelectorBestOfTwo;
 import pl.krug.neural.dao.NetworkModelDAO;
 import pl.krug.neural.network.NeuralNetwork;
 import pl.krug.neural.network.NeuralNetworkFactory;
 import pl.krug.neural.network.model.NetworkModel;
 import pl.krug.neural.network.model.NetworkModelFactory;
-import pl.krug.neural.network.neuron.NeuralLink;
-import pl.krug.neural.network.neuron.Neuron;
-import pl.krug.neural.network.neuron.NormalNeuron;
-import pl.krug.neural.network.neuron.WeightNeuron;
 
 public class SimpleGameRunner {
 

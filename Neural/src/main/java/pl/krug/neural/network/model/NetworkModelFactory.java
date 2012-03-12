@@ -1,8 +1,6 @@
 package pl.krug.neural.network.model;
 
-import java.util.List;
 import java.util.Random;
-
 import pl.krug.neural.dao.NetworkModelDAO;
 
 /**

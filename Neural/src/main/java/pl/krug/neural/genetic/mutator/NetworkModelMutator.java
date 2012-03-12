@@ -1,14 +1,11 @@
 package pl.krug.neural.genetic.mutator;
 
 import java.util.Random;
-
 import pl.krug.genetic.GeneticMutator;
-import pl.krug.neural.network.NeuralNetwork;
 import pl.krug.neural.network.model.NetworkModel;
 import pl.krug.neural.network.model.NetworkModelFactory;
 import pl.krug.neural.network.model.NeuralLinkModel;
 import pl.krug.neural.network.model.NeuronModel;
-import pl.krug.neural.network.neuron.Neuron;
 
 /**
  * Changes almost all aspects of the network but not the number of neurons in it

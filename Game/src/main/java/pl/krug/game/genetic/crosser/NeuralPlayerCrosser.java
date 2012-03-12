@@ -2,7 +2,6 @@ package pl.krug.game.genetic.crosser;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import pl.krug.game.NeuralPlayer;
 import pl.krug.genetic.GeneticCrosser;
 import pl.krug.neural.genetic.crosser.NetworkModelCrosser;

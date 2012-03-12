@@ -2,14 +2,11 @@ package pl.krug.game.runner;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import pl.krug.game.NeuralPlayer;
-import pl.krug.game.tron.IterativeTronGame;
-import pl.krug.game.tron.TronGame;
-import pl.krug.genetic.GeneticEngine;
 import pl.krug.game.genetic.crosser.NeuralPlayerCrosser;
+import pl.krug.game.tron.IterativeTronGame;
+import pl.krug.genetic.GeneticEngine;
 import pl.krug.genetic.impl.GeneticEngineStandard;
-import pl.krug.genetic.selector.util.impl.GeneticSelectorBestOfTwo;
 import pl.krug.neural.dao.NetworkModelDAO;
 import pl.krug.neural.network.NeuralNetwork;
 import pl.krug.neural.network.NeuralNetworkFactory;

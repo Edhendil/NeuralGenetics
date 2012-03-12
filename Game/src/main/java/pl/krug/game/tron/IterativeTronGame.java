@@ -1,17 +1,11 @@
 package pl.krug.game.tron;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CyclicBarrier;
-
 import org.apache.commons.math.random.RandomData;
 import org.apache.commons.math.random.RandomDataImpl;
-
 import pl.krug.game.NeuralPlayer;
 import pl.krug.genetic.GeneticEvaluator;
 import pl.krug.genetic.GeneticSelector;

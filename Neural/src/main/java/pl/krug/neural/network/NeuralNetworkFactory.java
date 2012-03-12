@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import pl.krug.neural.network.model.NetworkModel;
 import pl.krug.neural.network.model.NeuralLinkModel;
 import pl.krug.neural.network.model.NeuronModel;

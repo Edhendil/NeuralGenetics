@@ -2,7 +2,6 @@ package pl.krug.neural.network.neuron;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import pl.krug.neural.network.NeuralOutputEvent;
 import pl.krug.neural.network.NeuralOutputListener;
 import pl.krug.neural.network.signal.NeuralSignal;
