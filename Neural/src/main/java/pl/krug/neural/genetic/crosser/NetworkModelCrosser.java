@@ -1,4 +1,4 @@
-package pl.krug.genetic.crosser.impl;
+package pl.krug.neural.genetic.crosser;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.Set;
 
 import pl.krug.genetic.GeneticCrosser;
-import pl.krug.genetic.mutator.impl.NetworkModelMutator;
+import pl.krug.neural.genetic.mutator.NetworkModelMutator;
 import pl.krug.neural.network.model.NetworkModel;
 import pl.krug.neural.network.model.NeuralLinkModel;
 import pl.krug.neural.network.model.NeuronModel;

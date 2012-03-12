@@ -1,4 +1,4 @@
-package pl.krug.genetic.mutator.impl;
+package pl.krug.neural.genetic.mutator;
 
 import java.util.Random;
 

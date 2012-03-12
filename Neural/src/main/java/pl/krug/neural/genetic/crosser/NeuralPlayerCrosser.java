@@ -1,4 +1,4 @@
-package pl.krug.genetic.crosser.impl;
+package pl.krug.neural.genetic.crosser;
 
 import java.util.ArrayList;
 import java.util.List;

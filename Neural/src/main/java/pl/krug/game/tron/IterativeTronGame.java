@@ -22,19 +22,6 @@ import pl.krug.genetic.selector.util.impl.GeneticSelectorBestOfTwo;
  * Number of players must be a multiplication of 2, if not then one of players
  * will have instaloss each round
  *
- * Iterative grid? Wtedy kazdy z kazdym sąsiadem po kilka razy. A na koniec
- * dopiero z każdego segmentu wybieranych byłoby 2 zwyciezców z największą
- * ilością punktów, które mogli zdobyć też w innych meczach z jeszcze dalszymi
- * osobnikami.
- *
- * PopulationGrid? Działałoby altough można by wykombinować większą dozę
- * abstrakcji. Damn, ale na pewno to by się dało lepiej zrobić.
- *
- * Jeśli świat też byłby selectorem? Wtedy populacja musiałaby wylecieć z
- * silnika. Silnik tylko by mial selector i crosser, bez samej populacji.
- * Poszczególne osobniki byłyby wybierane przez selector i to on ewentualnie
- * mialby dostęp bezpośredni do całej populacji.
- *
  * @author edhendil
  *
  */

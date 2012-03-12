@@ -1,4 +1,4 @@
-package pl.krug.neural.runner;
+package pl.krug.game.runner;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,9 +1,9 @@
-package pl.krug.neural.runner;
+package pl.krug.game.runner;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.krug.genetic.crosser.impl.NetworkModelCrosser;
+import pl.krug.neural.genetic.crosser.NetworkModelCrosser;
 import pl.krug.neural.dao.NetworkModelDAO;
 import pl.krug.neural.network.NeuralNetwork;
 import pl.krug.neural.network.NeuralNetworkFactory;

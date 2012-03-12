@@ -1,4 +1,4 @@
-package pl.krug.neural.runner;
+package pl.krug.game.runner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +11,7 @@ import pl.krug.game.NeuralPlayer;
 import pl.krug.game.SimpleGame;
 import pl.krug.game.world.SimpleWorld;
 import pl.krug.genetic.GeneticEngine;
-import pl.krug.genetic.crosser.impl.NeuralPlayerCrosser;
+import pl.krug.neural.genetic.crosser.NeuralPlayerCrosser;
 import pl.krug.genetic.impl.GeneticEngineStandard;
 import pl.krug.genetic.selector.util.impl.GeneticSelectorBestOfTwo;
 import pl.krug.neural.dao.NetworkModelDAO;

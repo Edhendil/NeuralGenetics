@@ -2,7 +2,6 @@ package pl.krug.app;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import pl.krug.neural.dao.NetworkModelDAO;
 import pl.krug.neural.network.model.NetworkModel;
 
