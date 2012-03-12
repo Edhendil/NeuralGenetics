@@ -23,12 +23,13 @@ public class IterativeTronGame implements GeneticSelector<NeuralPlayer>, Genetic
 
     private Map<NeuralPlayer, Integer> _gamesWon = new HashMap<NeuralPlayer, Integer>();
     private List<NeuralPlayer> _players = new ArrayList<NeuralPlayer>();
-    private int _gamesPlayed = 0;
-    private RandomData random = new RandomDataImpl();
     private Queue<TronGame> _currentGames = new ConcurrentLinkedQueue<TronGame>();
     private int _threads = Runtime.getRuntime().availableProcessors();
     private CyclicBarrier _barrier = new CyclicBarrier(_threads + 1);
+    
     private int _roundNumber;
+    private int _gamesPlayed = 0;
+    private RandomData random = new RandomDataImpl();
 
     public IterativeTronGame(int roundNumber) {
         _roundNumber = roundNumber;

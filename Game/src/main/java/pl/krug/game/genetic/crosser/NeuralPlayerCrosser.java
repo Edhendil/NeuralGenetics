@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import pl.krug.game.NeuralPlayer;
 import pl.krug.genetic.GeneticCrosser;
-import pl.krug.neural.genetic.crosser.NetworkModelCrosser;
+import pl.krug.neural.genetic.NetworkModelCrosser;
 import pl.krug.neural.network.NeuralNetworkFactory;
 import pl.krug.neural.network.model.NetworkModel;
 
