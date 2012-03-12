@@ -13,79 +13,78 @@ import pl.krug.genetic.GeneticSelector;
 /**
  * Makes use of a crosser and selector. Any member can mate with any other in
  * the population. There are no restrictions.
- * 
+ *
  * @author edhendil
- * 
+ *
  * @param <T>
  */
 public class GeneticEngineStandard<T> implements GeneticEngine<T> {
 
-	// helper
-	private List<T> _newPopulation;
+    // helper
+    private List<T> _newPopulation;
+    private final GeneticCrosser<T> _crosser;
+    private final GeneticSelector<T> _selector;
+    // multithreading
+    private int _threadNumber;
+    private Queue<List<T>> _tasks;
+    private Queue<List<T>> _tasksResults;
+    private CyclicBarrier _barrier;
 
-	private final GeneticCrosser<T> _crosser;
-	private final GeneticSelector<T> _selector;
+    public GeneticEngineStandard(GeneticSelector<T> select,
+            GeneticCrosser<T> cross) {
+        _crosser = cross;
+        _selector = select;
+        _threadNumber = Runtime.getRuntime().availableProcessors();
+        _barrier = new CyclicBarrier(_threadNumber + 1);
+    }
 
-	// multithreading
-	private int _threadNumber;
-	private Queue<List<T>> _tasks;
-	private Queue<List<T>> _tasksResults;
-	private CyclicBarrier _barrier;
+    @Override
+    public List<T> createNextGeneration() {
+        // new population
+        _newPopulation = new ArrayList<T>();
+        // for every selected parent group
+        _tasks = new ConcurrentLinkedQueue<List<T>>(
+                _selector.selectParents());
+        _tasksResults = new ConcurrentLinkedQueue<List<T>>();
 
-	public GeneticEngineStandard(GeneticSelector<T> select,
-			GeneticCrosser<T> cross) {
-		_crosser = cross;
-		_selector = select;
-		_threadNumber = Runtime.getRuntime().availableProcessors();
-		_barrier = new CyclicBarrier(_threadNumber + 1);
-	}
+        // start crossing threads
+        for (int i = 0; i < _threadNumber; i++) {
+            new Thread(new CrossingProcessingThread()).start();
+        }
 
-	public List<T> createNextGeneration() {
-		// new population
-		_newPopulation = new ArrayList<T>();
-		// for every selected parent group
-		_tasks = new ConcurrentLinkedQueue<List<T>>(
-				_selector.selectParents());
-		_tasksResults = new ConcurrentLinkedQueue<List<T>>();
+        // wait for them to finish the job
+        try {
+            _barrier.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (BrokenBarrierException e) {
+            e.printStackTrace();
+        }
 
-		// start crossing threads
-		for (int i = 0; i < _threadNumber; i++)
-			new Thread(new CrossingProcessingThread()).start();
+        // process the result
+        for (List<T> children : _tasksResults) {
+            _newPopulation.addAll(children);
+        }
 
-		// wait for them to finish the job
-		try {
-			_barrier.await();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (BrokenBarrierException e) {
-			e.printStackTrace();
-		}
+        // replace old population with a new one
+        return _newPopulation;
+    }
 
-		// process the result
-		for (List<T> children : _tasksResults)
-			_newPopulation.addAll(children);
+    private class CrossingProcessingThread implements Runnable {
 
-		// replace old population with a new one
-                return _newPopulation;
-	}
-
-	private class CrossingProcessingThread implements Runnable {
-
-		@Override
-		public void run() {
-			List<T> parents;
-			while ((parents = _tasks.poll()) != null) {
-				_tasksResults.add(_crosser.crossover(parents));
-			}
-			try {
-				_barrier.await();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (BrokenBarrierException e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
-
+        @Override
+        public void run() {
+            List<T> parents;
+            while ((parents = _tasks.poll()) != null) {
+                _tasksResults.add(_crosser.crossover(parents));
+            }
+            try {
+                _barrier.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (BrokenBarrierException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
