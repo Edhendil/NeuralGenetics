@@ -1,5 +1,6 @@
 package pl.krug.neural.network.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
@@ -7,6 +8,8 @@ import javax.persistence.*;
 /**
  * Representation of neural network for genetic and persistence purposes, not
  * for execution. Events are not used here.
+ * IntefacingNodes - list of nodes communicating with the outside world.
+ * Exactly like the tables for sensors and effectors.
  * 
  * @author edhendil
  * 
@@ -14,11 +17,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Networks")
 public class NetworkModel {
-
+    
 	private Long _id;
 	private List<NeuronModel> _neurons = new ArrayList<NeuronModel>();
-	private List<NeuronModel> _sensors = new ArrayList<NeuronModel>();
-	private List<NeuronModel> _effectors = new ArrayList<NeuronModel>();
+	private List<NeuronModel> _interfacingNodes = new ArrayList<NeuronModel>();
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,25 +44,14 @@ public class NetworkModel {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "Sensors", joinColumns = @JoinColumn(name = "network_id", unique = false), inverseJoinColumns = @JoinColumn(name = "n_id", unique = true))
+	@JoinTable(name = "InterfacingNodes", joinColumns = @JoinColumn(name = "network_id", unique = false), inverseJoinColumns = @JoinColumn(name = "n_id", unique = true))
 	@OrderColumn(name = "orderIdx")
-	public List<NeuronModel> getSensors() {
-		return _sensors;
+	public List<NeuronModel> getInterfacingNodes() {
+		return _interfacingNodes;
 	}
 
-	public void setSensors(List<NeuronModel> sensors) {
-		_sensors = sensors;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "Effectors", joinColumns = @JoinColumn(name = "network_id", unique = false), inverseJoinColumns = @JoinColumn(name = "n_id", unique = true))
-	@OrderColumn(name = "orderIdx")
-	public List<NeuronModel> getEffectors() {
-		return _effectors;
-	}
-
-	public void setEffectors(List<NeuronModel> effectors) {
-		_effectors = effectors;
+	public void setInterfacingNodes(List<NeuronModel> interfacingNodes) {
+		_interfacingNodes = interfacingNodes;
 	}
 	
 	@Override

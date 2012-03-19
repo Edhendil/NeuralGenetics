@@ -26,7 +26,7 @@ public class NetworkModelFactory {
 	 * @param linkProb
 	 * @return
 	 */
-	public NetworkModel createRandomNetwork(int neuronsSize, int sensorsSize, int effectorsSize, double linkProb) {
+	public NetworkModel createRandomNetwork(int neuronsSize, int interNodesSize, double linkProb) {
 		NetworkModel model = new NetworkModel();
 		NeuronType normalType = _dao.getNeuronType(1);
 		// create neurons
@@ -36,15 +36,10 @@ public class NetworkModelFactory {
 			neuron.setPosition(i);
 			model.getNeurons().add(neuron);
 		}
-		// choose random neurons as sensors
-		for (int i = 0; i < sensorsSize; i++) {
+		// choose random neurons as interfacing nodes
+		for (int i = 0; i < interNodesSize; i++) {
 			int index = rand.nextInt(neuronsSize);
-			model.getSensors().add(model.getNeurons().get(index));
-		}
-		// choose random neurons as effectors
-		for (int i = 0; i < effectorsSize; i++) {
-			int index = rand.nextInt(neuronsSize);
-			model.getEffectors().add(model.getNeurons().get(index));
+			model.getInterfacingNodes().add(model.getNeurons().get(index));
 		}
 		// create random links
 		for (int i = 0; i < neuronsSize; i++) {

@@ -47,8 +47,7 @@ public class NetworkModelCrosser implements GeneticCrosser<NetworkModel> {
 		// neuron nie istnieje na podanej pozycji w sieci wynikowej to
 		// NULL
 
-		crossoverSensors(parents, result);
-		crossoverEffectors(parents, result);
+		crossoverInterfacingNodes(parents, result);
 
 		// linki tak jak in/out, jesli brak source/dest to nie ma polaczenia
 
@@ -140,9 +139,9 @@ public class NetworkModelCrosser implements GeneticCrosser<NetworkModel> {
 
 	}
 
-	private void crossoverEffectors(List<NetworkModel> parents,
+	private void crossoverInterfacingNodes(List<NetworkModel> parents,
 			List<NetworkModel> result) {
-		int maxSize = parents.get(0).getEffectors().size();
+		int maxSize = parents.get(0).getInterfacingNodes().size();
 		int crossoverIndex = _randomGenerator.nextInt(maxSize);
 
 		NeuronModel forFirstChild;
@@ -153,108 +152,53 @@ public class NetworkModelCrosser implements GeneticCrosser<NetworkModel> {
 				// if sensor in parent is not null and its counterpart by
 				// position in child is not null
 				// then assign this counterpart, else null
-				forFirstChild = parents.get(0).getEffectors().get(i) != null
+				forFirstChild = parents.get(0).getInterfacingNodes().get(i) != null
 						&& result
 								.get(0)
 								.getNeurons()
-								.get(parents.get(0).getEffectors().get(i)
+								.get(parents.get(0).getInterfacingNodes().get(i)
 										.getPosition()) != null ? result
 						.get(0)
 						.getNeurons()
-						.get(parents.get(0).getEffectors().get(i).getPosition())
+						.get(parents.get(0).getInterfacingNodes().get(i).getPosition())
 						: null;
-				forSecondChild = parents.get(1).getEffectors().get(i) != null
+				forSecondChild = parents.get(1).getInterfacingNodes().get(i) != null
 						&& result
 								.get(1)
 								.getNeurons()
-								.get(parents.get(1).getEffectors().get(i)
+								.get(parents.get(1).getInterfacingNodes().get(i)
 										.getPosition()) != null ? result
 						.get(1)
 						.getNeurons()
-						.get(parents.get(1).getEffectors().get(i).getPosition())
+						.get(parents.get(1).getInterfacingNodes().get(i).getPosition())
 						: null;
 			} else {
-				forFirstChild = parents.get(1).getEffectors().get(i) != null
+				forFirstChild = parents.get(1).getInterfacingNodes().get(i) != null
 						&& result
 								.get(0)
 								.getNeurons()
-								.get(parents.get(1).getEffectors().get(i)
+								.get(parents.get(1).getInterfacingNodes().get(i)
 										.getPosition()) != null ? result
 						.get(0)
 						.getNeurons()
-						.get(parents.get(1).getEffectors().get(i).getPosition())
+						.get(parents.get(1).getInterfacingNodes().get(i).getPosition())
 						: null;
-				forSecondChild = parents.get(0).getEffectors().get(i) != null
+				forSecondChild = parents.get(0).getInterfacingNodes().get(i) != null
 						&& result
 								.get(1)
 								.getNeurons()
-								.get(parents.get(0).getEffectors().get(i)
+								.get(parents.get(0).getInterfacingNodes().get(i)
 										.getPosition()) != null ? result
 						.get(1)
 						.getNeurons()
-						.get(parents.get(0).getEffectors().get(i).getPosition())
+						.get(parents.get(0).getInterfacingNodes().get(i).getPosition())
 						: null;
 			}
 
-			result.get(0).getEffectors().add(forFirstChild);
-			result.get(1).getEffectors().add(forSecondChild);
+			result.get(0).getInterfacingNodes().add(forFirstChild);
+			result.get(1).getInterfacingNodes().add(forSecondChild);
 		}
 
-	}
-
-	private void crossoverSensors(List<NetworkModel> parents,
-			List<NetworkModel> result) {
-		int maxSize = parents.get(0).getSensors().size();
-		int crossoverIndex = _randomGenerator.nextInt(maxSize);
-
-		NeuronModel forFirstChild;
-		NeuronModel forSecondChild;
-
-		for (int i = 0; i < maxSize; i++) {
-			if (i < crossoverIndex) {
-				forFirstChild = parents.get(0).getSensors().get(i) != null
-						&& result
-								.get(0)
-								.getNeurons()
-								.get(parents.get(0).getSensors().get(i)
-										.getPosition()) != null ? result.get(0)
-						.getNeurons()
-						.get(parents.get(0).getSensors().get(i).getPosition())
-						: null;
-				forSecondChild = parents.get(1).getSensors().get(i) != null
-						&& result
-								.get(1)
-								.getNeurons()
-								.get(parents.get(1).getSensors().get(i)
-										.getPosition()) != null ? result.get(1)
-						.getNeurons()
-						.get(parents.get(1).getSensors().get(i).getPosition())
-						: null;
-			} else {
-				forFirstChild = parents.get(1).getSensors().get(i) != null
-						&& result
-								.get(0)
-								.getNeurons()
-								.get(parents.get(1).getSensors().get(i)
-										.getPosition()) != null ? result.get(0)
-						.getNeurons()
-						.get(parents.get(1).getSensors().get(i).getPosition())
-						: null;
-				forSecondChild = parents.get(0).getSensors().get(i) != null
-						&& result
-								.get(1)
-								.getNeurons()
-								.get(parents.get(0).getSensors().get(i)
-										.getPosition()) != null ? result.get(1)
-						.getNeurons()
-						.get(parents.get(0).getSensors().get(i).getPosition())
-						: null;
-			}
-
-			result.get(0).getSensors().add(forFirstChild);
-			result.get(1).getSensors().add(forSecondChild);
-
-		}
 	}
 
 	private void crossoverNeurons(List<NetworkModel> parents,

@@ -16,12 +16,9 @@ public class NeuralNetwork {
 	private List<Neuron> _neurons;
 	// all links
 	private List<NeuralLink> _links;
-	// part of neurons responsible for processing the input
+	// part of neurons responsible for communicating with the world
 	// helper
-	private List<Neuron> _sensors;
-	// part of neurons responsible for affecting the world
-	// helper
-	private List<Neuron> _effectors;
+	private List<Neuron> _interfacingNodes;
 
 	public void runNetworkStep() {
 		// if helpers are not initialized, altough they should be placed in
@@ -34,7 +31,7 @@ public class NeuralNetwork {
 	public void runNetworkStep(double[] state) {
 		// add energy to input neurons
 		for (int i = 0; i < state.length; i++) {
-			Neuron neu = getSensors().get(i);
+			Neuron neu = getInterfacingNodes().get(i);
 			if (neu != null)
 				neu.setCurrentEnergy(neu.getCurrentEnergy() + state[i]);
 		}
@@ -43,10 +40,10 @@ public class NeuralNetwork {
 	}
 
 	public double[] getNetworkResponse() {
-		double[] out = new double[getEffectors().size()];
+		double[] out = new double[getInterfacingNodes().size()];
 		for (int i = 0; i < out.length; i++) {
-			if (getEffectors().get(i) != null)
-				out[i] = getEffectors().get(i).getCurrentEnergy();
+			if (getInterfacingNodes().get(i) != null)
+				out[i] = getInterfacingNodes().get(i).getCurrentEnergy();
 			else
 				out[i] = 0;
 		}
@@ -90,19 +87,11 @@ public class NeuralNetwork {
 		_links = links;
 	}
 
-	public List<Neuron> getSensors() {
-		return _sensors;
+	public List<Neuron> getInterfacingNodes() {
+		return _interfacingNodes;
 	}
 
-	public List<Neuron> getEffectors() {
-		return _effectors;
-	}
-
-	public void setEffectors(List<Neuron> effectors) {
-		_effectors = effectors;
-	}
-
-	public void setSensors(List<Neuron> sensors) {
-		_sensors = sensors;
+	public void setInterfacingNodes(List<Neuron> interfacingNodes) {
+		_interfacingNodes = interfacingNodes;
 	}
 }
