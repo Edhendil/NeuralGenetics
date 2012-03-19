@@ -34,7 +34,7 @@ public class SimpleGameRunner {
         List<NeuralPlayer> players = new ArrayList<NeuralPlayer>();
         for (int i = 0; i < 100; i++) {
             NeuralPlayer player = new NeuralPlayer();
-            NetworkModel model = modelFactory.createRandomNetwork(30, 2, 1, 0.2);
+            NetworkModel model = modelFactory.createRandomNetwork(30, 3, 0.2);
             NeuralNetwork network = neuralFactory.createNetwork(model);
             player.setModel(model);
             player.setNeuralNetwork(network);
