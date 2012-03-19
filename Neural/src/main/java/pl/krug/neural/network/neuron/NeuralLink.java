@@ -6,107 +6,78 @@ import java.util.List;
 import java.util.Queue;
 import pl.krug.neural.network.signal.NeuralSignal;
 import pl.krug.neural.network.signal.SignalListener;
-import pl.krug.neural.network.signal.SignalProducer;
 import pl.krug.neural.network.signal.SignalType;
 
 /**
  * One-way link between neurons.
- * 
+ *
  * @author edhendil
- * 
+ *
  */
-public class NeuralLink implements SignalListener, SignalProducer {
+public class NeuralLink extends BasicNetworkElement implements NetworkLink {
 
-	private double _changeFactor;
-	private double _weight;
+    private double _changeFactor;
+    private double _weight;
 
-	private Queue<NeuralSignal> _signals = new LinkedList<NeuralSignal>();
-	private List<SignalListener> _signalListeners = new ArrayList<SignalListener>();
+    public double getChangeFactor() {
+        return _changeFactor;
+    }
 
-	public double getChangeFactor() {
-		return _changeFactor;
-	}
+    public void setChangeFactor(double changeFactor) {
+        _changeFactor = changeFactor;
+    }
 
-	public void setChangeFactor(double changeFactor) {
-		_changeFactor = changeFactor;
-	}
+    public double getWeight() {
+        return _weight;
+    }
 
-	public double getWeight() {
-		return _weight;
-	}
+    public void setWeight(double weight) {
+        _weight = weight;
+    }
 
-	public void setWeight(double weight) {
-		_weight = weight;
-	}
-
-	public void addSignalListener(SignalListener listener) {
-		_signalListeners.add(listener);
-	}
-
-	public void removeSignalListener(SignalListener listener) {
-		_signalListeners.remove(listener);
-	}
-
-	@Override
-	public void signalReceived(NeuralSignal signal) {
-		_signals.add(signal);
-	}
-
-	/**
-	 * Consume all signals simultaneously
-	 */
-	public void consumeSignals() {
-		// backup old values
-		double newWeight = _weight;
-		double newChangeFactor = _changeFactor;
-		// for all signals in the queue
-		while (!_signals.isEmpty()) {
-			NeuralSignal signal = _signals.poll();
-			switch (signal.getType()) {
-			case ENERGY:
-				for (SignalListener listener : _signalListeners) {
-					listener.signalReceived(new NeuralSignal(SignalType.ENERGY,
-							signal.getStrength() * _weight));
-//					System.out.println("energy");
-				}
-				break;
-			case WEIGHT_IMPULSE:
-				for (SignalListener listener : _signalListeners) {
-					listener.signalReceived(new NeuralSignal(
-							SignalType.WEIGHT_IMPULSE, signal.getStrength()
-									* _weight));
-//					System.out.println("w impulse");
-				}
-				break;
-			case SENSITIVITY_IMPULSE:
-				for (SignalListener listener : _signalListeners) {
-					listener.signalReceived(new NeuralSignal(
-							SignalType.SENSITIVITY_IMPULSE, signal.getStrength()
-									* _weight));
-//					System.out.println("s impulse");
-				}
-				break;
-			case WEIGHT:
-				newWeight += signal.getStrength() * _changeFactor;
-//				System.out.println("w");
-				break;
-			case SENSITIVITY:
-				newChangeFactor += signal.getStrength();
-//				System.out.println("s");
-				break;
-			}
-		}
-		_weight = newWeight;
-		// dont let change factor fall below 0
-		_changeFactor = newChangeFactor > 0 ? newChangeFactor : 0.0;
-	}
-
-	/**
-	 * Does not produce any signals
-	 */
-	@Override
-	public void produceSignals() {
-
-	}
-
+    @Override
+    public void processElement() {
+        // backup old values
+        double newWeight = _weight;
+        double newChangeFactor = _changeFactor;
+        // helper vars
+        double energyStrength = 0.0;
+        double weightStrength = 0.0;
+        double sensitivityStrength = 0.0;
+        // for all signals in the queue
+        while (!getSignals().isEmpty()) {
+            NeuralSignal signal = getSignals().poll();
+            switch (signal.getType()) {
+                case ENERGY:
+                    energyStrength += signal.getStrength();
+                    break;
+                case WEIGHT_IMPULSE:
+                    weightStrength += signal.getStrength();
+                    break;
+                case SENSITIVITY_IMPULSE:
+                    sensitivityStrength += signal.getStrength();
+                    break;
+                case WEIGHT:
+                    newWeight += signal.getStrength() * _changeFactor;
+                    break;
+                case SENSITIVITY:
+                    newChangeFactor += signal.getStrength();
+                    break;
+            }
+        }
+        // assign new weight
+        _weight = newWeight;
+        // dont let change factor fall below 0
+        _changeFactor = newChangeFactor > 0 ? newChangeFactor : 0.0;
+        // fire proper signals
+        if (weightStrength > 0) {
+            fireSignal(weightStrength, SignalType.WEIGHT_IMPULSE);
+        }
+        if (sensitivityStrength > 0) {
+            fireSignal(sensitivityStrength, SignalType.SENSITIVITY_IMPULSE);
+        }
+        if (energyStrength > 0) {
+            fireSignal(energyStrength, SignalType.ENERGY);
+        }
+    }
 }

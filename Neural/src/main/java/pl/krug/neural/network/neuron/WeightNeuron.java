@@ -7,15 +7,34 @@ import pl.krug.neural.network.signal.SignalType;
 public class WeightNeuron extends BaseNeuron {
 
     @Override
-    public void produceSignals() {
-        if (getCurrentEnergy() > 0) {
-            double signalStrenght = getCurrentEnergy()
-                    / _signalListeners.size();
-            for (SignalListener listener : _signalListeners) {
-                listener.signalReceived(new NeuralSignal(SignalType.WEIGHT_IMPULSE,
-                        signalStrenght));
+    public void processElement() {
+        // backup old value
+        double energyStrength = 0.0;
+        double weightStrength = 0.0;
+        double sensitivityStrength = 0.0;
+        // for all signals in the queue
+        while (!getSignals().isEmpty()) {
+            NeuralSignal signal = getSignals().poll();
+            switch (signal.getType()) {
+                case ENERGY:
+                    energyStrength += signal.getStrength();
+                    break;
+                case WEIGHT_IMPULSE:
+                    weightStrength += signal.getStrength();
+                    break;
+                case SENSITIVITY_IMPULSE:
+                    sensitivityStrength += signal.getStrength();
+                    break;
             }
-            setCurrentEnergy(0);
+        }
+        if (weightStrength > 0) {
+            fireSignal(weightStrength, SignalType.WEIGHT);
+        }
+        if (sensitivityStrength > 0) {
+            fireSignal(sensitivityStrength, SignalType.SENSITIVITY);
+        }
+        if (energyStrength > 0) {
+            fireSignal(energyStrength, SignalType.WEIGHT_IMPULSE);
         }
     }
 }
