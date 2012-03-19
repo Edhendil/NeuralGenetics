@@ -31,28 +31,28 @@ public class IterativeTronGameRunner {
 		NetworkModelFactory modelFactory = new NetworkModelFactory();
 		NeuralNetworkFactory neuralFactory = new NeuralNetworkFactory();
 		
-		NetworkModelDAO dao = new NetworkModelDAO();
+//		NetworkModelDAO dao = new NetworkModelDAO();
 		
 		List<NeuralPlayer> players = new ArrayList<NeuralPlayer>();
-		for (long i = 429; i < 479; i++) {
-			NeuralPlayer player = new NeuralPlayer();
-			NetworkModel model = dao.getNetwork(i);
-			NeuralNetwork network = neuralFactory.createNetwork(model);
-			player.setModel(model);
-			player.setNeuralNetwork(network);
-			players.add(player);
-		}
-
-		
-//		for (int i = 0; i < 10; i++) {
+//		for (long i = 429; i < 479; i++) {
 //			NeuralPlayer player = new NeuralPlayer();
-//			NetworkModel model = modelFactory.createRandomNetwork(400, 308, 3,
-//					0.1);
+//			NetworkModel model = dao.getNetwork(i);
 //			NeuralNetwork network = neuralFactory.createNetwork(model);
 //			player.setModel(model);
 //			player.setNeuralNetwork(network);
 //			players.add(player);
 //		}
+
+		
+		for (int i = 0; i < 10; i++) {
+			NeuralPlayer player = new NeuralPlayer();
+			NetworkModel model = modelFactory.createRandomNetwork(400, 311,
+					0.1);
+			NeuralNetwork network = neuralFactory.createNetwork(model);
+			player.setModel(model);
+			player.setNeuralNetwork(network);
+			players.add(player);
+		}
 
 		game.addPlayers(players);
 

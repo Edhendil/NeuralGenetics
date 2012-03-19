@@ -1,6 +1,7 @@
 package pl.krug.game.tron;
 
 import java.awt.Point;
+import java.util.Arrays;
 import pl.krug.game.NeuralPlayer;
 
 /**
@@ -103,8 +104,8 @@ public class TronGame {
         _rightPlayer.runNetwork(reverseInput, 25);
 
         // get responses
-        double[] leftResp = _leftPlayer.getResponse();
-        double[] rightResp = _rightPlayer.getResponse();
+        double[] leftResp = Arrays.copyOfRange(_leftPlayer.getResponse(), 308, 310);
+        double[] rightResp = Arrays.copyOfRange(_rightPlayer.getResponse(), 308, 310);
 
         // update states
         // replace current players positions with wall

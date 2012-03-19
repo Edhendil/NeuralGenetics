@@ -29,10 +29,10 @@ public class SimpleGameRunner {
         NetworkModelFactory modelFactory = new NetworkModelFactory();
         NeuralNetworkFactory neuralFactory = new NeuralNetworkFactory();
 
-        NetworkModelDAO dao = new NetworkModelDAO();
+//        NetworkModelDAO dao = new NetworkModelDAO();
 
         List<NeuralPlayer> players = new ArrayList<NeuralPlayer>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 50; i++) {
             NeuralPlayer player = new NeuralPlayer();
             NetworkModel model = modelFactory.createRandomNetwork(30, 3, 0.2);
             NeuralNetwork network = neuralFactory.createNetwork(model);
@@ -45,7 +45,7 @@ public class SimpleGameRunner {
 
         long timeBeforeGame, timeAfterGame, timeAfterGeneration;
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 500; i++) {
             System.out.println("Round " + (i + 1));
             timeBeforeGame = System.currentTimeMillis();
             game.runGame();

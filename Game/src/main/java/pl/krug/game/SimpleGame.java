@@ -17,7 +17,7 @@ import pl.krug.genetic.selector.util.impl.GeneticSelectorBestOfTwo;
 public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluator<NeuralPlayer> {
 
     // world state
-    private int _inputValue;
+    private double _inputValue;
     private double[] _neuralInput;
     private final Map<NeuralPlayer, Double> _states = new HashMap<NeuralPlayer, Double>();
     // always
@@ -39,7 +39,7 @@ public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluat
     @Override
     public double evaluate(NeuralPlayer individual) {
         double result = _states.get(individual);
-        System.out.println("Network eval: " + result);
+        System.out.println("Network eval: " + result + " Network output: " + Arrays.toString(individual.getResponse()));
         return result;
     }
 
@@ -138,7 +138,7 @@ public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluat
             _states.put(
                     player,
                     _states.get(player)
-                    - Math.abs(_inputValue - neuralOutput[0]));
+                    - Math.abs((double) _inputValue - neuralOutput[2]));
         }
         // world state
         startNextRound();
@@ -151,6 +151,7 @@ public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluat
         Random rand = new Random();
         _inputValue = rand.nextInt(2);
         _neuralInput = new double[]{_inputValue, 1 - _inputValue};
+//        System.out.println("Input " + Arrays.toString(_neuralInput));
     }
 
     public List<List<NeuralPlayer>> selectParents() {
