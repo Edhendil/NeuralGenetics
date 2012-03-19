@@ -12,8 +12,7 @@ import java.util.List;
 public class GeneticSelectorRoulette<T> {
 
 	public List<List<T>> selectParents(List<T> population) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 }
