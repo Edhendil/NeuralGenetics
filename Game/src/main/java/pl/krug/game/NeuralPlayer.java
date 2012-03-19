@@ -16,28 +16,29 @@ public class NeuralPlayer {
     private NetworkModel _model;
 
     public NeuralNetwork getNeuralNetwork() {
-	return _neuralNetwork;
+        return _neuralNetwork;
     }
 
     public void setNeuralNetwork(NeuralNetwork neuralNetwork) {
-	_neuralNetwork = neuralNetwork;
+        _neuralNetwork = neuralNetwork;
     }
 
     public NetworkModel getModel() {
-	return _model;
+        return _model;
     }
 
     public void setModel(NetworkModel model) {
-	_model = model;
+        _model = model;
     }
 
     public void runNetwork(double[] neuralInput, int steps) {
-	for (int i = 0; i < steps; i++) {
-	    _neuralNetwork.runNetworkStep(neuralInput);
-	}
+        _neuralNetwork.setInput(neuralInput);
+        for (int i = 0; i < steps; i++) {
+            _neuralNetwork.runNetworkStep();
+        }
     }
 
     public double[] getResponse() {
-	return _neuralNetwork.getNetworkResponse();
+        return _neuralNetwork.getResponse();
     }
 }
