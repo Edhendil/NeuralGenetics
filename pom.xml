@@ -23,6 +23,5 @@
     <module>Genetic</module>
     <module>Neural</module>
     <module>Game</module>
-    <module>Massmailer</module>
   </modules>
 </project>
