@@ -29,7 +29,7 @@ public class NetworkModelMutator implements GeneticMutator<NetworkModel> {
                 double mutationType = rand.nextDouble();
                 // change neuron type?
                 if (mutationType < 0.1) {
-                    // TODO
+                    // TODO changing neuron type
                 } else {
                     // mutate links
                     double linkRandType = rand.nextDouble();

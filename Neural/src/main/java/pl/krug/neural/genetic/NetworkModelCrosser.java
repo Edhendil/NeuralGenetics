@@ -89,7 +89,6 @@ public class NetworkModelCrosser implements GeneticCrosser<NetworkModel> {
 				parents.get(1).getNeurons().size());
 		int crossoverIndex = _randomGenerator.nextInt(maxSize);
 
-		// set instead of list
 		List<NeuralLinkModel> forFirstChild = null;
 		List<NeuralLinkModel> forSecondChild = null;
 

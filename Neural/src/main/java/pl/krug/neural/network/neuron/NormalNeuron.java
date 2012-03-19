@@ -6,17 +6,16 @@ import pl.krug.neural.network.signal.SignalType;
 
 public class NormalNeuron extends BaseNeuron {
 
-	@Override
-	public void produceSignals() {
-		if (getCurrentEnergy() > 0) {
-			double signalStrenght = getCurrentEnergy()
-					/ _signalListeners.size();
-			for (SignalListener listener : _signalListeners) {
-				listener.signalReceived(new NeuralSignal(SignalType.ENERGY,
-						signalStrenght));
-			}
-			setCurrentEnergy(0);
-		}
+    @Override
+    public void produceSignals() {
+	if (getCurrentEnergy() > 0) {
+	    double signalStrenght = getCurrentEnergy()
+		    / _signalListeners.size();
+	    for (SignalListener listener : _signalListeners) {
+		listener.signalReceived(new NeuralSignal(SignalType.ENERGY,
+			signalStrenght));
+	    }
+	    setCurrentEnergy(0);
 	}
-
+    }
 }
