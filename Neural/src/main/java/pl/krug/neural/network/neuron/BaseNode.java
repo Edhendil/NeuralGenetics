@@ -9,12 +9,12 @@ import pl.krug.neural.network.signal.SignalListener;
 import pl.krug.neural.network.signal.SignalType;
 
 /**
- * Make it thread safe?
+ * Just a base for all network nodes.
  *
  * @author edhendil
  *
  */
-public abstract class BaseNeuron extends BasicNetworkElement implements NetworkNode {
+public abstract class BaseNode extends BasicNetworkElement implements NetworkNode {
 
     private double _nodeActivationLevel;
 

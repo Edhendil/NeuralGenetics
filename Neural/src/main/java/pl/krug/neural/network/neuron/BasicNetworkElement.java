@@ -19,10 +19,12 @@ import pl.krug.neural.network.signal.SignalType;
  */
 public abstract class BasicNetworkElement implements NetworkElement {
 
-    public BasicNetworkElement() {
-    }
     private Queue<NeuralSignal> _signals = new LinkedList<NeuralSignal>();
     private List<SignalListener> _signalListeners = new ArrayList<SignalListener>();
+    private boolean processingRequired;
+
+    public BasicNetworkElement() {
+    }
 
     @Override
     public void addSignalListener(SignalListener listener) {
@@ -37,6 +39,7 @@ public abstract class BasicNetworkElement implements NetworkElement {
     @Override
     public void signalReceived(SignalEvent event) {
         _signals.add(event.getSignal());
+        processingRequired = true;
     }
 
     protected List<SignalListener> getSignalListeners() {
@@ -45,6 +48,14 @@ public abstract class BasicNetworkElement implements NetworkElement {
 
     protected Queue<NeuralSignal> getSignals() {
         return _signals;
+    }
+
+    protected boolean isProcessingRequired() {
+        return processingRequired;
+    }
+
+    protected void setProcessingRequired(boolean processingRequired) {
+        this.processingRequired = processingRequired;
     }
 
     protected void fireSignal(double strength, SignalType type) {
