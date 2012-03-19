@@ -7,10 +7,7 @@ import java.util.Map;
 import pl.krug.neural.network.model.NetworkModel;
 import pl.krug.neural.network.model.NeuralLinkModel;
 import pl.krug.neural.network.model.NeuronModel;
-import pl.krug.neural.network.neuron.NeuralLink;
-import pl.krug.neural.network.neuron.NetworkNode;
-import pl.krug.neural.network.neuron.NormalNeuron;
-import pl.krug.neural.network.neuron.WeightNeuron;
+import pl.krug.neural.network.neuron.*;
 
 /**
  * Creates NeuralNetwork object out of NetworkModel.
@@ -33,11 +30,11 @@ public class NeuralNetworkFactory {
         // create all neurons
         for (NeuronModel neu : model.getNeurons()) {
             NetworkNode neuron = null;
-            if (neu.getType().getId() == 1) {
+            if (neu.getType() == NeuronTypeEnum.NORMAL) {
                 NormalNeuron norm = new NormalNeuron();
                 norm.setNodeActivationLevel(neu.getActivationLevel());
                 neuron = norm;
-            } else if (neu.getType().getId() == 2) {
+            } else if (neu.getType() == NeuronTypeEnum.WEIGHT) {
                 WeightNeuron weight = new WeightNeuron();
                 weight.setNodeActivationLevel(neu.getActivationLevel());
                 neuron = weight;

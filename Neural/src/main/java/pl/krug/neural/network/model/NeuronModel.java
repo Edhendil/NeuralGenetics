@@ -3,13 +3,14 @@ package pl.krug.neural.network.model;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
+import pl.krug.neural.network.neuron.NeuronTypeEnum;
 
 @Entity
 @Table(name = "Neurons")
 public class NeuronModel {
 
     private Long _id;
-    private NeuronType _type;
+    private NeuronTypeEnum _type;
     // network this neuron is a part of
     private NetworkModel _network;
     // order of neurons in network
@@ -43,13 +44,13 @@ public class NeuronModel {
         _id = id;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "nt_id")
-    public NeuronType getType() {
+    @Column(name="nt_id")
+    @Enumerated(EnumType.ORDINAL)
+    public NeuronTypeEnum getType() {
         return _type;
     }
 
-    public void setType(NeuronType type) {
+    public void setType(NeuronTypeEnum type) {
         _type = type;
     }
 

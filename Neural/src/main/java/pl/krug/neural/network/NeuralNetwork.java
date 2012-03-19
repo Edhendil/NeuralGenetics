@@ -106,6 +106,7 @@ public class NeuralNetwork extends BasicNetworkElement {
     private void clearOutput() {
         // array values are initialized to 0.0
         response = new double[_interfacingNodes.size()];
+        Arrays.fill(response, 0.0);
     }
 
     public List<NetworkNode> getNeurons() {

@@ -5,7 +5,7 @@ import pl.krug.neural.network.signal.SignalListener;
 import pl.krug.neural.network.signal.SignalType;
 
 public class WeightNeuron extends BaseNode {
-
+    
     @Override
     public void processElement() {
         if (isProcessingRequired()) {

@@ -28,14 +28,6 @@ public class NetworkModelDAO {
 		return _em.find(NetworkModel.class, id);
 	}
 
-	public List<NeuronType> getNeuronTypes() {
-		return _em.createQuery("from NeuronType", NeuronType.class).getResultList();
-	}
-
-	public NeuronType getNeuronType(long i) {
-		return _em.find(NeuronType.class, i);
-	}
-
 	public List<NetworkModel> getNetworkList() {
 		return _em.createQuery("from NetworkModel", NetworkModel.class).getResultList();
 	}
