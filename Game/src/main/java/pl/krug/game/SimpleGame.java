@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CyclicBarrier;
+import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 import pl.krug.genetic.GeneticEvaluator;
 import pl.krug.genetic.GeneticSelector;
 import pl.krug.genetic.selector.util.impl.GeneticSelectorBestOfTwo;
@@ -26,7 +27,7 @@ public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluat
     private List<NeuralPlayer> _players = new ArrayList<NeuralPlayer>();
     // number of ticks before the evaluation phase and crossover
     // often
-    private int _numberOfRounds = 20;
+    private int _numberOfRounds = 50;
     // multithreading helpers
     private int _threadNumber = Runtime.getRuntime().availableProcessors();
     private Queue<NeuralPlayer> _tasks;
@@ -38,9 +39,7 @@ public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluat
 
     @Override
     public double evaluate(NeuralPlayer individual) {
-        double result = _states.get(individual);
-        System.out.println("Network eval: " + result + " Network output: " + Arrays.toString(individual.getResponse()));
-        return result;
+        return _states.get(individual);
     }
 
     /**
@@ -157,6 +156,30 @@ public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluat
     public List<List<NeuralPlayer>> selectParents() {
         GeneticSelectorBestOfTwo<NeuralPlayer> select = new GeneticSelectorBestOfTwo<NeuralPlayer>(this);
         return select.selectParents(this._players);
+    }
+
+    /**
+     * Prints all vital information, best evaluation, mean, standard deviation.
+     */
+    public void printStatistics() {
+
+        // Get a DescriptiveStatistics instance
+        SummaryStatistics stats = new SummaryStatistics();
+        Double[] values = new Double[_states.values().size()];
+        _states.values().toArray(values);
+
+        // Add the data from the array
+        for (int i = 0; i < values.length; i++) {
+            stats.addValue(values[i]);
+        }
+
+        // Compute some statistics
+        double mean = stats.getMean();
+        double std = stats.getStandardDeviation();
+        double max = stats.getMax();
+
+        System.out.println("Best: " + max + "\nMean:" + mean + "\nDeviation: " + std);
+
     }
 
     /**

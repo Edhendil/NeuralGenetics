@@ -7,7 +7,6 @@ import pl.krug.game.SimpleGame;
 import pl.krug.game.genetic.crosser.NeuralPlayerCrosser;
 import pl.krug.genetic.GeneticEngine;
 import pl.krug.genetic.impl.GeneticEngineStandard;
-import pl.krug.neural.dao.NetworkModelDAO;
 import pl.krug.neural.network.NeuralNetwork;
 import pl.krug.neural.network.NeuralNetworkFactory;
 import pl.krug.neural.network.model.NetworkModel;
@@ -32,9 +31,9 @@ public class SimpleGameRunner {
 //        NetworkModelDAO dao = new NetworkModelDAO();
 
         List<NeuralPlayer> players = new ArrayList<NeuralPlayer>();
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 100; i++) {
             NeuralPlayer player = new NeuralPlayer();
-            NetworkModel model = modelFactory.createRandomNetwork(30, 3, 0.2);
+            NetworkModel model = modelFactory.createRandomNetwork(300, 3, 0.2);
             NeuralNetwork network = neuralFactory.createNetwork(model);
             player.setModel(model);
             player.setNeuralNetwork(network);
@@ -52,6 +51,7 @@ public class SimpleGameRunner {
             timeAfterGame = System.currentTimeMillis();
             List<NeuralPlayer> newPop = genetic.createNextGeneration();
             timeAfterGeneration = System.currentTimeMillis();
+            game.printStatistics();
             game.replacePlayers(newPop);
             System.out.println("Time to run networks: " + ((timeAfterGame - timeBeforeGame) / 1000.0));
             System.out.println("Time to run genetic engine: " + ((timeAfterGeneration - timeAfterGame) / 1000.0));

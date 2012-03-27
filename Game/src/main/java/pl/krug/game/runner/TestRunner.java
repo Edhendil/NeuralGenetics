@@ -1,15 +1,10 @@
 package pl.krug.game.runner;
 
 import java.util.Arrays;
-import pl.krug.neural.dao.NetworkModelDAO;
 import pl.krug.neural.network.NeuralNetwork;
 import pl.krug.neural.network.NeuralNetworkFactory;
 import pl.krug.neural.network.model.NetworkModel;
 import pl.krug.neural.network.model.NetworkModelFactory;
-import pl.krug.neural.network.model.NeuronModel;
-import pl.krug.neural.network.signal.NeuralSignal;
-import pl.krug.neural.network.signal.SignalEvent;
-import pl.krug.neural.network.signal.SignalType;
 
 public class TestRunner {
 
