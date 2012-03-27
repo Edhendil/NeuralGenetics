@@ -23,5 +23,6 @@
     <module>Genetic</module>
     <module>Neural</module>
     <module>Game</module>
+    <module>Utilities</module>
   </modules>
 </project>
