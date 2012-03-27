@@ -1,7 +1,6 @@
 package pl.krug.neural.network.neuron;
 
 import pl.krug.neural.network.signal.NeuralSignal;
-import pl.krug.neural.network.signal.SignalListener;
 import pl.krug.neural.network.signal.SignalType;
 
 public class WeightNeuron extends BaseNode {

@@ -1,11 +1,6 @@
 package pl.krug.neural.network.neuron;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 import pl.krug.neural.network.signal.NeuralSignal;
-import pl.krug.neural.network.signal.SignalListener;
 import pl.krug.neural.network.signal.SignalType;
 
 /**

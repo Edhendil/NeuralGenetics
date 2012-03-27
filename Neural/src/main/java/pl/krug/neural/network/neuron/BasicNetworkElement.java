@@ -59,9 +59,12 @@ public abstract class BasicNetworkElement implements NetworkElement {
     }
 
     protected void fireSignal(double strength, SignalType type) {
-        for (SignalListener listener : getSignalListeners()) {
-            listener.signalReceived(new SignalEvent(this, new NeuralSignal(type,
-                    strength)));
+        if (!getSignalListeners().isEmpty()) {
+            SignalEvent event = new SignalEvent(this, new NeuralSignal(type,
+                    strength));
+            for (SignalListener listener : getSignalListeners()) {
+                listener.signalReceived(event);
+            }
         }
     }
 }

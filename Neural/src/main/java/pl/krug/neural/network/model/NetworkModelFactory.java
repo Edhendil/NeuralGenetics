@@ -11,17 +11,17 @@ import pl.krug.neural.network.neuron.NeuronTypeEnum;
  *
  */
 public class NetworkModelFactory {
-    
+
     NetworkModelDAO _dao = new NetworkModelDAO();
     Random rand = new Random();
-    
+
     public NetworkModel createEmptyNetwork() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Supports only normal neurons
-     * Turned off weight neurons as they were causing troubles in networks.
+     * Supports only normal neurons Turned off weight neurons as they were
+     * causing troubles in networks.
      *
      * @param neuronsSize
      * @param interNodesSize
@@ -35,7 +35,7 @@ public class NetworkModelFactory {
             NeuronModel neuron = rand.nextDouble() < 0.00 ? createWeightNeuron() : createNormalNeuron();
             neuron.setNetwork(model);
             neuron.setPosition(i);
-            neuron.setActivationLevel(rand.nextDouble()*2);
+            neuron.setActivationLevel(rand.nextDouble()*10);
             model.getNeurons().add(neuron);
         }
         // choose random neurons as interfacing nodes
@@ -56,23 +56,33 @@ public class NetworkModelFactory {
         }
         return model;
     }
-    
+
     public NeuronModel createNormalNeuron() {
         NeuronModel model = new NeuronModel();
         model.setType(NeuronTypeEnum.NORMAL);
         return model;
     }
-    
+
     public NeuronModel createWeightNeuron() {
         NeuronModel model = new NeuronModel();
         model.setType(NeuronTypeEnum.WEIGHT);
         return model;
     }
-    
+
     public NeuralLinkModel createNeuralLink() {
         NeuralLinkModel link = new NeuralLinkModel();
         link.setChangeFactor(rand.nextDouble());
-        link.setWeight(rand.nextGaussian()/100.0);
+        link.setWeight(rand.nextGaussian());
         return link;
+    }
+
+    private double clamp(double value, double min, double max) {
+        if (value < min) {
+            return min;
+        }
+        if (value > max) {
+            return max;
+        }
+        return value;
     }
 }

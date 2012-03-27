@@ -7,7 +7,6 @@ import javax.persistence.Persistence;
 import pl.krug.neural.network.model.NetworkModel;
 import pl.krug.neural.network.model.NeuralLinkModel;
 import pl.krug.neural.network.model.NeuronModel;
-import pl.krug.neural.network.model.NeuronType;
 
 /**
  * 
