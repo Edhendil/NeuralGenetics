@@ -26,7 +26,6 @@ public class IterativeTronGame implements GeneticSelector<NeuralPlayer>, Genetic
     private Queue<TronGame> _currentGames = new ConcurrentLinkedQueue<TronGame>();
     private int _threads = Runtime.getRuntime().availableProcessors();
     private CyclicBarrier _barrier = new CyclicBarrier(_threads + 1);
-    
     private int _roundNumber;
     private int _gamesPlayed = 0;
     private RandomData random = new RandomDataImpl();
@@ -82,6 +81,13 @@ public class IterativeTronGame implements GeneticSelector<NeuralPlayer>, Genetic
     public List<List<NeuralPlayer>> selectParents() {
         GeneticSelectorBestOfTwo<NeuralPlayer> select = new GeneticSelectorBestOfTwo<NeuralPlayer>(this);
         return select.selectParents(_players);
+    }
+
+    public void newGenerationCreated(Map<List<NeuralPlayer>, List<NeuralPlayer>> generationMap) {
+        resetGame();
+        for (List<NeuralPlayer> children : generationMap.values()) {
+            addPlayers(children);
+        }
     }
 
     /**

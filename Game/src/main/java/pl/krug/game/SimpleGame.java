@@ -1,9 +1,10 @@
 package pl.krug.game;
 
 import java.util.*;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 import pl.krug.genetic.GeneticEvaluator;
 import pl.krug.genetic.GeneticSelector;
@@ -27,11 +28,9 @@ public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluat
     private List<NeuralPlayer> _players = new ArrayList<NeuralPlayer>();
     // number of ticks before the evaluation phase and crossover
     // often
-    private int _numberOfRounds = 50;
+    private int _numberOfRounds = 10;
     // multithreading helpers
     private int _threadNumber = Runtime.getRuntime().availableProcessors();
-    private Queue<NeuralPlayer> _tasks;
-    private CyclicBarrier _barrier = new CyclicBarrier(_threadNumber + 1);
 
     public SimpleGame() {
         startNextRound();
@@ -56,17 +55,16 @@ public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluat
      * Single round from providing input to reading output
      */
     private void runIteration() {
-        _tasks = new ConcurrentLinkedQueue<NeuralPlayer>(_players);
-        // run threads
-        for (int i = 0; i < _threadNumber; i++) {
-            new Thread(new PlayerProcessingThread()).start();
+        ExecutorService exec = Executors.newFixedThreadPool(_threadNumber);
+        List<PlayerProcessingCallable> tasks = new ArrayList<PlayerProcessingCallable>();
+        for (NeuralPlayer player : _players) {
+            tasks.add(new PlayerProcessingCallable(player));
         }
         try {
-            _barrier.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (BrokenBarrierException e) {
-            e.printStackTrace();
+            exec.invokeAll(tasks);
+            exec.shutdown();
+            exec.awaitTermination(15, TimeUnit.MINUTES);
+        } catch (InterruptedException ex) {
         }
         updateWorldState();
     }
@@ -82,9 +80,21 @@ public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluat
         }
     }
 
+    /**
+     * To be replaced by newGenerationCreated from genetic interface
+     *
+     * @param players
+     */
     public void replacePlayers(Collection<NeuralPlayer> players) {
         removeAllPlayers();
         registerPlayer(players);
+    }
+
+    public void newGenerationCreated(Map<List<NeuralPlayer>, List<NeuralPlayer>> generationMap) {
+        removeAllPlayers();
+        for (List<NeuralPlayer> children : generationMap.values()) {
+            registerPlayer(children);
+        }
     }
 
     /**
@@ -153,6 +163,7 @@ public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluat
 //        System.out.println("Input " + Arrays.toString(_neuralInput));
     }
 
+    @Override
     public List<List<NeuralPlayer>> selectParents() {
         GeneticSelectorBestOfTwo<NeuralPlayer> select = new GeneticSelectorBestOfTwo<NeuralPlayer>(this);
         return select.selectParents(this._players);
@@ -182,27 +193,18 @@ public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluat
 
     }
 
-    /**
-     * Takes take of multithreading GameEngine responsibility
-     *
-     * @author edhendil
-     *
-     */
-    private class PlayerProcessingThread implements Runnable {
+    private class PlayerProcessingCallable implements Callable<Void> {
+
+        private NeuralPlayer player;
+
+        public PlayerProcessingCallable(NeuralPlayer player) {
+            this.player = player;
+        }
 
         @Override
-        public void run() {
-            NeuralPlayer player;
-            while ((player = _tasks.poll()) != null) {
-                player.runNetwork(getInputForPlayer(player), 50);
-            }
-            try {
-                _barrier.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (BrokenBarrierException e) {
-                e.printStackTrace();
-            }
+        public Void call() throws Exception {
+            player.runNetwork(getInputForPlayer(player), 50);
+            return null;
         }
     }
 }

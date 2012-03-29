@@ -4,14 +4,13 @@
  */
 package pl.krug.game;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CyclicBarrier;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Does not return any results.
@@ -20,18 +19,17 @@ import java.util.logging.Logger;
  */
 public class MultiThreadedTasksQueue implements GameTasksQueue {
 
-    private ConcurrentLinkedQueue<Callable<Void>> queue = new ConcurrentLinkedQueue<Callable<Void>>();
+    private List<Callable<Void>> list = new ArrayList<Callable<Void>>();
     private int threadsNumber;
-    private CyclicBarrier barrier;
+    private ExecutorService exec;
 
     public MultiThreadedTasksQueue(int threadsNumber) {
         this.threadsNumber = threadsNumber;
-        this.barrier = new CyclicBarrier(threadsNumber + 1);
     }
 
     @Override
     public void addTask(Callable<Void> task) {
-        queue.add(task);
+        list.add(task);
     }
 
     @Override
@@ -43,38 +41,13 @@ public class MultiThreadedTasksQueue implements GameTasksQueue {
 
     @Override
     public void processTasksAndWait() {
-        barrier.reset();
-        for (int i = 0; i < threadsNumber; i++) {
-            new Thread(new TaskProcessingThread()).start();
-        }
+        exec = Executors.newFixedThreadPool(threadsNumber);
         try {
-            barrier.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (BrokenBarrierException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private class TaskProcessingThread implements Runnable {
-
-        @Override
-        public void run() {
-            Callable<Void> task;
-            while ((task = queue.poll()) != null) {
-                try {
-                    task.call();
-                } catch (Exception ex) {
-                    Logger.getLogger(MultiThreadedTasksQueue.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            try {
-                barrier.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (BrokenBarrierException e) {
-                e.printStackTrace();
-            }
+            exec.invokeAll(list);
+            exec.shutdown();
+            exec.awaitTermination(15, TimeUnit.MINUTES);
+            list.clear();
+        } catch (InterruptedException ex) {
         }
     }
 }
