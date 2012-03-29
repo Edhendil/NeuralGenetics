@@ -1,11 +1,11 @@
 package pl.krug.genetic.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.*;
 import pl.krug.genetic.GeneticCrosser;
 import pl.krug.genetic.GeneticEngine;
 import pl.krug.genetic.GeneticSelector;
@@ -21,7 +21,6 @@ import pl.krug.genetic.GeneticSelector;
 public class GeneticEngineStandard<T> implements GeneticEngine<T> {
 
     // helper
-    private List<T> _newPopulation;
     private final GeneticCrosser<T> _crosser;
     private final GeneticSelector<T> _selector;
     // multithreading
@@ -39,52 +38,44 @@ public class GeneticEngineStandard<T> implements GeneticEngine<T> {
     }
 
     @Override
-    public List<T> createNextGeneration() {
+    public Map<List<T>, List<T>> createNextGeneration() {
         // new population
-        _newPopulation = new ArrayList<T>();
-        // for every selected parent group
-        _tasks = new ConcurrentLinkedQueue<List<T>>(
-                _selector.selectParents());
-        _tasksResults = new ConcurrentLinkedQueue<List<T>>();
+        Map<List<T>, List<T>> newPopulation = new HashMap<List<T>, List<T>>();
 
-        // start crossing threads
-        for (int i = 0; i < _threadNumber; i++) {
-            new Thread(new CrossingProcessingThread()).start();
-        }
+        List<Future<List<T>>> results = new ArrayList<Future<List<T>>>();
 
-        // wait for them to finish the job
+        List<List<T>> parents = _selector.selectParents();
+
+        ExecutorService exec = Executors.newFixedThreadPool(_threadNumber);
+
         try {
-            _barrier.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (BrokenBarrierException e) {
-            e.printStackTrace();
-        }
-
-        // process the result
-        for (List<T> children : _tasksResults) {
-            _newPopulation.addAll(children);
+            for (List<T> parentSet : parents) {
+                results.add(exec.submit(new CrossingProcessingCallable(parentSet)));
+            }
+            exec.shutdown();
+            exec.awaitTermination(15, TimeUnit.MINUTES);
+            for (int i = 0; i < parents.size(); i++) {
+                newPopulation.put(parents.get(i), results.get(i).get());
+            }
+        } catch (InterruptedException ex) {
+        } catch (ExecutionException ex) {
         }
 
         // replace old population with a new one
-        return _newPopulation;
+        return newPopulation;
     }
 
-    private class CrossingProcessingThread implements Runnable {
+    private class CrossingProcessingCallable implements Callable<List<T>> {
+
+        private List<T> parents;
+
+        public CrossingProcessingCallable(List<T> parents) {
+            this.parents = parents;
+        }
 
         @Override
-        public void run() {
-            List<T> parents;
-            while ((parents = _tasks.poll()) != null) {
-                _tasksResults.add(_crosser.crossover(parents));
-            }
-            try {
-                _barrier.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (BrokenBarrierException e) {
-                e.printStackTrace();
-            }
+        public List<T> call() throws Exception {
+            return _crosser.crossover(parents);
         }
     }
 }
