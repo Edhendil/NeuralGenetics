@@ -6,10 +6,11 @@ package pl.krug.utilities;
 
 /**
  * Type safe generic two dimensional array.
+ *
  * @author Edhendil
  */
 public class GenericGrid<T> {
-    
+
     private Object[][] grid;
     private int height;
     private int width;
@@ -28,6 +29,10 @@ public class GenericGrid<T> {
         return (T) grid[width][height];
     }
 
+    public void clear() {
+        grid = new Object[width][height];
+    }
+
     public int getWidth() {
         return width;
     }
@@ -35,5 +40,4 @@ public class GenericGrid<T> {
     public int getHeight() {
         return height;
     }
-    
 }
