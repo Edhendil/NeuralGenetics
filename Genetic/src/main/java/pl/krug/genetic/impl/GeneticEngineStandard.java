@@ -25,16 +25,12 @@ public class GeneticEngineStandard<T> implements GeneticEngine<T> {
     private final GeneticSelector<T> _selector;
     // multithreading
     private int _threadNumber;
-    private Queue<List<T>> _tasks;
-    private Queue<List<T>> _tasksResults;
-    private CyclicBarrier _barrier;
 
     public GeneticEngineStandard(GeneticSelector<T> select,
             GeneticCrosser<T> cross) {
         _crosser = cross;
         _selector = select;
         _threadNumber = Runtime.getRuntime().availableProcessors();
-        _barrier = new CyclicBarrier(_threadNumber + 1);
     }
 
     @Override
@@ -75,7 +71,9 @@ public class GeneticEngineStandard<T> implements GeneticEngine<T> {
 
         @Override
         public List<T> call() throws Exception {
-            return _crosser.crossover(parents);
+            List<T> result = _crosser.crossover(parents);
+            parents = null;
+            return result;
         }
     }
 }
