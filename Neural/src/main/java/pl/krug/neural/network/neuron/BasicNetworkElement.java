@@ -61,7 +61,7 @@ public abstract class BasicNetworkElement implements NetworkElement {
     protected void fireSignal(double strength, SignalType type) {
         if (!getSignalListeners().isEmpty()) {
             SignalEvent event = new SignalEvent(this, new NeuralSignal(type,
-                    strength));
+                    strength / getSignalListeners().size()));
             for (SignalListener listener : getSignalListeners()) {
                 listener.signalReceived(event);
             }

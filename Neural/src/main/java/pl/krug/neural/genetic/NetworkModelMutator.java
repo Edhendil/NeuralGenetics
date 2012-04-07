@@ -16,7 +16,22 @@ import pl.krug.neural.network.model.NeuronModel;
 public class NetworkModelMutator implements GeneticMutator<NetworkModel> {
 
     private NetworkModelFactory _factory = new NetworkModelFactory();
-    private double _mutationRate = 0.01;
+    private double _mutationRate = 0.2;
+
+    public NetworkModelMutator(double mutationRate) {
+        _mutationRate = mutationRate;
+    }
+
+    public NetworkModelMutator() {
+    }
+
+    public double getMutationRate() {
+        return _mutationRate;
+    }
+
+    public void setMutationRate(double _mutationRate) {
+        this._mutationRate = _mutationRate;
+    }
 
     @Override
     public NetworkModel mutate(NetworkModel individual) {

@@ -1,7 +1,6 @@
 package pl.krug.neural.network.model;
 
 import java.util.Random;
-import pl.krug.neural.dao.NetworkModelDAO;
 import pl.krug.neural.network.neuron.NeuronTypeEnum;
 
 /**
@@ -12,7 +11,6 @@ import pl.krug.neural.network.neuron.NeuronTypeEnum;
  */
 public class NetworkModelFactory {
 
-    NetworkModelDAO _dao = new NetworkModelDAO();
     Random rand = new Random();
 
     public NetworkModel createEmptyNetwork() {
