@@ -32,20 +32,20 @@ public class SimpleGameRunner {
 //        NetworkModelDAO dao = new NetworkModelDAO();
 
         List<NeuralPlayer> players = new ArrayList<NeuralPlayer>();
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 5000; i++) {
             NeuralPlayer player = new NeuralPlayer();
-            NetworkModel model = modelFactory.createRandomNetwork(300, 3, 0.2);
+            NetworkModel model = modelFactory.createRandomNetwork(10, 3, 0.2);
             NeuralNetwork network = neuralFactory.createNetwork(model);
             player.setModel(model);
             player.setNeuralNetwork(network);
             players.add(player);
         }
 
-        game.registerPlayer(players);
+        game.addPlayers(players);
 
         long timeBeforeGame, timeAfterGame, timeAfterGeneration;
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 5000; i++) {
             System.out.println("Round " + (i + 1));
             timeBeforeGame = System.currentTimeMillis();
             game.runGame();

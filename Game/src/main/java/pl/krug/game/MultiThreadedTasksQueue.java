@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Does not return any results.
+ * Does not return any results. Stores tasks and process them on request.
  *
  * @author Edhendil
  */
@@ -22,6 +22,10 @@ public class MultiThreadedTasksQueue implements GameTasksQueue {
     private List<Callable<Void>> list = new ArrayList<Callable<Void>>();
     private int threadsNumber;
     private ExecutorService exec;
+
+    public MultiThreadedTasksQueue() {
+        this.threadsNumber = Runtime.getRuntime().availableProcessors();
+    }
 
     public MultiThreadedTasksQueue(int threadsNumber) {
         this.threadsNumber = threadsNumber;

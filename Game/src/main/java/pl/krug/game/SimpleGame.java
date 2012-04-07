@@ -2,13 +2,7 @@ package pl.krug.game;
 
 import java.util.*;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
-import pl.krug.genetic.GeneticEvaluator;
-import pl.krug.genetic.GeneticSelector;
-import pl.krug.genetic.selector.util.impl.GeneticSelectorBestOfTwo;
 
 /**
  * Takes care of multithreading and all the basic stuff that happens in every
@@ -16,23 +10,19 @@ import pl.krug.genetic.selector.util.impl.GeneticSelectorBestOfTwo;
  *
  * @author edhendil
  */
-public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluator<NeuralPlayer> {
+public class SimpleGame extends AbstractGridGame implements GeneticGame<NeuralPlayer> {
 
+    private Random randomGenerator = new Random();
     // world state
     private double _inputValue;
     private double[] _neuralInput;
     private final Map<NeuralPlayer, Double> _states = new HashMap<NeuralPlayer, Double>();
-    // always
-    // game level
-    // does game without world make sense?
-    private List<NeuralPlayer> _players = new ArrayList<NeuralPlayer>();
     // number of ticks before the evaluation phase and crossover
     // often
-    private int _numberOfRounds = 10;
-    // multithreading helpers
-    private int _threadNumber = Runtime.getRuntime().availableProcessors();
+    private int _numberOfRounds = 20;
 
     public SimpleGame() {
+        super(100, 50);
         startNextRound();
     }
 
@@ -45,6 +35,7 @@ public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluat
      * Initialize starting state for world and players Play an arbitrary number
      * of rounds Game method
      */
+    @Override
     public void runGame() {
         for (int i = 0; i < _numberOfRounds; i++) {
             runIteration();
@@ -55,75 +46,12 @@ public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluat
      * Single round from providing input to reading output
      */
     private void runIteration() {
-        ExecutorService exec = Executors.newFixedThreadPool(_threadNumber);
-        List<PlayerProcessingCallable> tasks = new ArrayList<PlayerProcessingCallable>();
-        for (NeuralPlayer player : _players) {
-            tasks.add(new PlayerProcessingCallable(player));
-        }
-        try {
-            exec.invokeAll(tasks);
-            exec.shutdown();
-            exec.awaitTermination(15, TimeUnit.MINUTES);
-        } catch (InterruptedException ex) {
-        }
-        updateWorldState();
-    }
-
-    public void registerPlayer(NeuralPlayer player) {
-        _states.put(player, 0.0);
-        _players.add(player);
-    }
-
-    public void registerPlayer(Collection<NeuralPlayer> players) {
+        List<NeuralPlayer> players = getPlayersList();
         for (NeuralPlayer player : players) {
-            registerPlayer(player);
+            getTasksQueue().addTask(new NeuralPlayerProcessingCallable(player, getInputForPlayer(player), 10));
         }
-    }
-
-    /**
-     * To be replaced by newGenerationCreated from genetic interface
-     *
-     * @param players
-     */
-    public void replacePlayers(Collection<NeuralPlayer> players) {
-        removeAllPlayers();
-        registerPlayer(players);
-    }
-
-    public void newGenerationCreated(Map<List<NeuralPlayer>, List<NeuralPlayer>> generationMap) {
-        removeAllPlayers();
-        for (List<NeuralPlayer> children : generationMap.values()) {
-            registerPlayer(children);
-        }
-    }
-
-    /**
-     * Obvious
-     */
-    public void removeAllPlayers() {
-        _states.clear();
-        _players.clear();
-    }
-
-    /**
-     * Obvious
-     *
-     * @param player
-     */
-    public void removePlayer(NeuralPlayer player) {
-        _states.remove(player);
-        _players.remove(player);
-    }
-
-    /**
-     * Resets world state and players state but does not remove players from the
-     * world
-     */
-    private void resetWorldState() {
-        for (NeuralPlayer player : _states.keySet()) {
-            _states.put(player, 0.0);
-        }
-        startNextRound();
+        getTasksQueue().processTasksAndWait();
+        updateWorldState();
     }
 
     /**
@@ -142,7 +70,8 @@ public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluat
      */
     private void updateWorldState() {
         // players state
-        for (NeuralPlayer player : _states.keySet()) {
+        List<NeuralPlayer> players = getPlayersList();
+        for (NeuralPlayer player : players) {
             double[] neuralOutput = player.getResponse();
             _states.put(
                     player,
@@ -157,16 +86,8 @@ public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluat
      * Sets all important aspects
      */
     private void startNextRound() {
-        Random rand = new Random();
-        _inputValue = rand.nextInt(2);
+        _inputValue = randomGenerator.nextInt(2);
         _neuralInput = new double[]{_inputValue, 1 - _inputValue};
-//        System.out.println("Input " + Arrays.toString(_neuralInput));
-    }
-
-    @Override
-    public List<List<NeuralPlayer>> selectParents() {
-        GeneticSelectorBestOfTwo<NeuralPlayer> select = new GeneticSelectorBestOfTwo<NeuralPlayer>(this);
-        return select.selectParents(this._players);
     }
 
     /**
@@ -193,18 +114,13 @@ public class SimpleGame implements GeneticSelector<NeuralPlayer>, GeneticEvaluat
 
     }
 
-    private class PlayerProcessingCallable implements Callable<Void> {
+    @Override
+    protected void initializePlayerState(NeuralPlayer player) {
+        _states.put(player, 0.0);
+    }
 
-        private NeuralPlayer player;
-
-        public PlayerProcessingCallable(NeuralPlayer player) {
-            this.player = player;
-        }
-
-        @Override
-        public Void call() throws Exception {
-            player.runNetwork(getInputForPlayer(player), 50);
-            return null;
-        }
+    @Override
+    protected void destroyPlayerState(NeuralPlayer player) {
+        _states.remove(player);
     }
 }

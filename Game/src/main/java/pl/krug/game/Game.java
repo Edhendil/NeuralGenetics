@@ -19,8 +19,6 @@ public interface Game {
 
     public void removePlayers(Collection<NeuralPlayer> players);
 
-    public void clearPlayers();
-
     /**
      * Do not assume it is linked the real players collection. Probably even
      * immutable.
